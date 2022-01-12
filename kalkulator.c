@@ -105,7 +105,9 @@ static wielomian wyrazenie(char **inp, wielomian w2)
     if (z == '-'){
         wielomian zero=malloc(sizeof(Wielomian));
         zero->size=1;
-        zero->val[0]=0;
+        double* zero_tab=calloc(1,sizeof(double));
+        *zero_tab=0;
+        zero->val=zero_tab;
         zero->var[0]=wyn->var[0];
         wyn=sub(zero,wyn);
         del(zero);

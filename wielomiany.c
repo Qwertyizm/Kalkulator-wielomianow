@@ -13,59 +13,6 @@ int max(int a, int b){
 }
 
 
-//TODO Fix convert function
-/*void convert(int i){
-    int pow=1;
-    while(i>=pow){
-        pow*=10;
-    }
-    pow/=10;
-    while(true){
-        int k=i/pow;
-        switch(k){
-            case 1:
-                wg_print(U"\u00B9");
-                break;
-
-            case 2:
-                wg_print(U"\u00B2");
-                break;
-
-            case 3:
-                wg_print(u"\u00B3");
-                break;
-
-            case 4:
-                wg_print(u"\u00B2");
-                break;
-
-            case 5:
-                wg_print(u"\u00B2");
-                break;
-
-            case 6:
-                wg_print(u"\u00B2");
-                break;
-
-            case 7:
-                wg_print(u"\u00B2");
-                break;
-
-            case 8:
-                wg_print(u"\u00B2");
-                break;
-
-            case 9:
-                wg_print(u"\u00B2");
-                break;
-        }
-        i-=k;
-        pow/=10;
-        if(pow<1) break;
-    }
-
-}
-*/
 
 char* print(wielomian v){
     char* wynik=malloc((8*v->size)*sizeof(char));
@@ -73,17 +20,16 @@ char* print(wielomian v){
     char temp[30];
     *temp='\0';
     for(int i=0;i<v->size-1;i++){
-        if(v->val[i]==0){
+        if(v->val[i]==0){ // omit empty powers
             continue;
         }
-        sprintf(temp,"%.4f%c^%i",v->val[i],v->var[0],v->size-i-1);
+        sprintf(temp,"%.2f%c^%i",v->val[i],v->var[0],v->size-i-1);
         strcat(wynik,temp);
         if(v->val[i+1]>=0){
             strcat(wynik,"+");
         }
-        //convert(v->size-i-1);
     }
-    sprintf(temp,"%.4f",v->val[v->size-1]);
+    sprintf(temp,"%.2f",v->val[v->size-1]);
     strcat(wynik,temp);
     del(v);
     return wynik;
@@ -92,8 +38,7 @@ char* print(wielomian v){
 wielomian compute(wielomian v, wielomian x){
     wielomian wynik=malloc(sizeof(Wielomian));
     wynik->size=1;
-    double* w_tab=malloc(sizeof(double));
-    w_tab[0]=0;
+    double* w_tab=calloc(1,sizeof(double));
     for(int i=0;i<v->size;i++){
         w_tab[0]*=x->val[0];
         w_tab[0]+=v->val[i];
@@ -110,7 +55,7 @@ wielomian copy(wielomian v){
     if(v->size>1){
         a->var[0]=v->var[0];
     }
-    double* tab=malloc(a->size*sizeof(double));
+    double* tab=calloc(a->size,sizeof(double));
     for(int i=0;i<a->size;i++){
         tab[i]=v->val[i];
     }
@@ -132,10 +77,7 @@ wielomian add(wielomian v, wielomian y){
     else if(y->size>1){
         z->var[0]=y->var[0];
     }
-    double* tab=malloc(z->size*sizeof(double));
-    for(int i=0;i<z->size;i++){
-        tab[i]=0;
-    }
+    double* tab=calloc(z->size,sizeof(double));
     for(int i=0;i<z->size;i++){
 
         if(v->size>i){
@@ -164,10 +106,7 @@ wielomian sub(wielomian v, wielomian y){
     else if(y->size>1){
         z->var[0]=y->var[0];
     }
-    double* tab=malloc(z->size*sizeof(double));
-    for(int i=0;i<z->size;i++){
-        tab[i]=0;
-    }
+    double* tab=calloc(z->size,sizeof(double));
     for(int i=0;i<z->size;i++){
         if(v->size>i){
             tab[i+(z->size-v->size)]+=v->val[i];
@@ -187,7 +126,7 @@ wielomian sub(wielomian v, wielomian y){
     del(y);
     return z;
 }
-//TODO nie działa dla x*x
+
 wielomian multiply(wielomian v, wielomian y){
     if(v->size>1&&y->size>1&&v->var[0]!=y->var[0]){
         g_print("unsupported action");
@@ -201,10 +140,7 @@ wielomian multiply(wielomian v, wielomian y){
     else if(y->size>1){
         z->var[0]=y->var[0];
     }
-    double* tab=malloc(z->size*sizeof(double));
-    for(int i=0;i<z->size;i++){
-        tab[i]=0;
-    }
+    double* tab=calloc(z->size,sizeof(double));
     for(int i=0;i<v->size;i++){
         for(int j=0;j<y->size;j++){
             tab[i+j]+=v->val[i]*y->val[j];
@@ -233,12 +169,12 @@ wielomian divide(wielomian v, wielomian y,wielomian r,bool delete){
     r=copy(v);
     if(z->size<=0){
         z->size=1;
-        double* tab=malloc(sizeof(double));
+        double* tab=calloc(1,sizeof(double));
         tab[0]=0;
         z->val=tab;
         return z;
     }
-    double* tab=malloc(z->size*sizeof(double));
+    double* tab=calloc(z->size,sizeof(double));
     for(int i=0;i<z->size;i++){
         tab[i]=r->val[0]/y->val[0];
         for(int j=0;j<y->size-1;j++){
@@ -290,7 +226,7 @@ wielomian nwd(wielomian v, wielomian y){
     wielomian r=NULL;
     wielomian zero=malloc(sizeof(Wielomian));
     zero->size=1;
-    double* z_tab=malloc(sizeof(double));
+    double* z_tab=calloc(1,sizeof(double));
     z_tab[0]=0;
     zero->val=z_tab;
     zero->var[0]=b->var[0];
