@@ -60,7 +60,6 @@ wielomian copy(wielomian v){
         tab[i]=v->val[i];
     }
     a->val=tab;
-    del(v);
     return a;
 }
 
@@ -151,6 +150,8 @@ wielomian multiply(wielomian v, wielomian y){
     del(y);
     return z;
 }
+
+
 //TODO fix divide() function
 wielomian divide(wielomian v, wielomian y,wielomian r,bool delete){
     if(v->size>1&&y->size>1&&v->var[0]!=y->var[0]){
@@ -166,7 +167,8 @@ wielomian divide(wielomian v, wielomian y,wielomian r,bool delete){
         z->var[0]=y->var[0];
     }
 
-    r=copy(v);
+    wielomian temp=copy(v);
+    *r=*temp;
     if(z->size<=0){
         z->size=1;
         double* tab=calloc(1,sizeof(double));

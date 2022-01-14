@@ -15,7 +15,8 @@ G_MODULE_EXPORT void oblicz_wyrazenie( GtkWidget *widget,GtkWidget *text)
     gchar wejscie[100+2];
     strcpy(wejscie, gtk_entry_get_text(GTK_ENTRY(text)));
     wielomian w1=NULL;
-    wielomian w2=NULL;
+    wielomian w2=g_malloc(sizeof(Wielomian));
+    w2->size=0;
     w1=oblicz(wejscie,w2);
     //TODO fix memory leaks: error -1073740940 (0xC0000374) == heap_corruption
     if(w1!=NULL){
@@ -24,7 +25,7 @@ G_MODULE_EXPORT void oblicz_wyrazenie( GtkWidget *widget,GtkWidget *text)
     else{
         gtk_entry_set_text(GTK_ENTRY(wynik),"0");
     }
-    if(w2!=NULL){
+    if(w2->size!=0){
         gtk_entry_set_text(GTK_ENTRY(reszta),(gchar*)print(w2));
     }
     else{

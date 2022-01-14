@@ -6,18 +6,6 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/Stan/Desktop/Projekty C/Projekt/kalkulator.c
-stdio.h
--
-stdlib.h
--
-ctype.h
--
-gtk/gtk.h
--
-kalkulator.h
-C:/Users/Stan/Desktop/Projekty C/Projekt/kalkulator.h
-
 C:/Users/Stan/Desktop/Projekty C/Projekt/kalkulator.h
 stdio.h
 -
@@ -36,20 +24,6 @@ C:/Users/Stan/Desktop/Projekty C/Projekt/kalkulator.h
 gtk/gtk.h
 -
 string.h
--
-
-C:/Users/Stan/Desktop/Projekty C/Projekt/wielomiany.c
-stdio.h
--
-stdlib.h
--
-stdbool.h
--
-string.h
--
-wielomiany.h
-C:/Users/Stan/Desktop/Projekty C/Projekt/wielomiany.h
-gtk/gtk.h
 -
 
 C:/Users/Stan/Desktop/Projekty C/Projekt/wielomiany.h
