@@ -66,7 +66,7 @@ wielomian copy(wielomian v){
 }
 
 wielomian add(wielomian v, wielomian y){
-    if(v->size>1&&y->size>1&&v->var[0]!=y->var[0]){
+    if(v==NULL||y==NULL||(v->size>1&&y->size>1&&v->var[0]!=y->var[0])){
         msg("unsupported action");
         return NULL;
     }
@@ -95,7 +95,7 @@ wielomian add(wielomian v, wielomian y){
 }
 
 wielomian sub(wielomian v, wielomian y){
-    if(v->size>1&&y->size>1&&v->var[0]!=y->var[0]){
+    if(v==NULL||y==NULL||(v->size>1&&y->size>1&&v->var[0]!=y->var[0])){
         msg("unsupported action");
         return NULL;
     }
@@ -129,7 +129,7 @@ wielomian sub(wielomian v, wielomian y){
 }
 
 wielomian multiply(wielomian v, wielomian y){
-    if(v->size>1&&y->size>1&&v->var[0]!=y->var[0]){
+    if(v==NULL||y==NULL||(v->size>1&&y->size>1&&v->var[0]!=y->var[0])){
         msg("unsupported action");
         return NULL;
     }
@@ -156,7 +156,7 @@ wielomian multiply(wielomian v, wielomian y){
 
 
 wielomian divide(wielomian v, wielomian y,wielomian r,bool delete){
-    if(v->size>1&&y->size>1&&v->var[0]!=y->var[0]){
+    if(v==NULL||y==NULL||(v->size>1&&y->size>1&&v->var[0]!=y->var[0])){
         msg("unsupported action");
         return NULL;
     }
@@ -207,7 +207,7 @@ bool greater_than(wielomian v, wielomian y){
     if(v==NULL){
         return false;
     }
-    if(v->size>1&&y->size>1&&v->var[0]!=y->var[0]){
+    if(v==NULL||y==NULL||(v->size>1&&y->size>1&&v->var[0]!=y->var[0])){
         msg("unsupported action");
         return false;
     }
@@ -221,7 +221,7 @@ bool greater_than(wielomian v, wielomian y){
 }
 
 wielomian nwd(wielomian v, wielomian y){
-    if(v->size>1&&y->size>1&&v->var[0]!=y->var[0]){
+    if(v==NULL||y==NULL||(v->size>1&&y->size>1&&v->var[0]!=y->var[0])){
         msg("unsupported action");
         return NULL;
     }
