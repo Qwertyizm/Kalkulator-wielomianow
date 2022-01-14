@@ -5,7 +5,7 @@
 #include "kalkulator.h"
 
 
-
+extern void msg(gchar* message);
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "LoopDoesntUseConditionVariableInspection"
 #define WIELOMIAN '0'
@@ -22,6 +22,9 @@ wielomian oblicz(char *wejscie, wielomian w2)
     if((z=czytaj_znak(&inptr)) != EOF) {
         zwroc_znak(z,&inptr);
         wynik=wyrazenie(&inptr,w2);
+    }
+    else{
+        msg("Puste wejście");
     }
     return wynik;
 }
@@ -108,9 +111,7 @@ static wielomian wyrazenie(char **inp, wielomian w2)
         double* zero_tab=calloc(1,sizeof(double));
         *zero_tab=0;
         zero->val=zero_tab;
-        zero->var[0]=wyn->var[0];
         wyn=sub(zero,wyn);
-        del(zero);
     }
 
     while ((z=czytaj_znak(inp)) == '+' || z == '-') {
@@ -135,10 +136,12 @@ static wielomian skladnik(char **inp,wielomian w2)
                 wyn=(z=='c' ? compute(wyn,x2) : nwd(wyn,x2));
             }
             else{
+                msg("Brakuje nawiasu");
                 return NULL;
             }
         }
         else{
+            msg("Niewłaściwa składnia");
             return NULL;
         }
     }
@@ -147,7 +150,7 @@ static wielomian skladnik(char **inp,wielomian w2)
         wyn=czynnik(inp);
         while ((z=czytaj_znak(inp)) == '*' || z == '/') {
             x2=czynnik(inp);
-            wyn=(z == '*' ? multiply(wyn,x2) : divide(wyn,x2,w2,true));  //TODO find out why w2 isn't changed when divide() is called
+            wyn=(z == '*' ? multiply(wyn,x2) : divide(wyn,x2,w2,true));
         }
         zwroc_znak(z, inp);
     }
@@ -166,7 +169,7 @@ static wielomian czynnik(char **inp)
         if ((z = czytaj_znak(inp)) == ')')
             return wyn;
         else{
-            g_print("Błąd!");
+            msg("Brakuje nawiasu");
         }
     }
     return NULL;

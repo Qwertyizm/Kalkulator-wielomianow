@@ -6,6 +6,8 @@
 #include "wielomiany.h"
 #include <gtk/gtk.h>
 
+extern void msg(gchar* message);
+
 int max(int a, int b){
     if(a>b)
         return a;
@@ -65,7 +67,7 @@ wielomian copy(wielomian v){
 
 wielomian add(wielomian v, wielomian y){
     if(v->size>1&&y->size>1&&v->var[0]!=y->var[0]){
-        g_print("unsupported action");
+        msg("unsupported action");
         return NULL;
     }
     wielomian z=malloc(sizeof(Wielomian));
@@ -94,7 +96,7 @@ wielomian add(wielomian v, wielomian y){
 
 wielomian sub(wielomian v, wielomian y){
     if(v->size>1&&y->size>1&&v->var[0]!=y->var[0]){
-        g_print("unsupported action");
+        msg("unsupported action");
         return NULL;
     }
     wielomian z=malloc(sizeof(Wielomian));
@@ -128,7 +130,7 @@ wielomian sub(wielomian v, wielomian y){
 
 wielomian multiply(wielomian v, wielomian y){
     if(v->size>1&&y->size>1&&v->var[0]!=y->var[0]){
-        g_print("unsupported action");
+        msg("unsupported action");
         return NULL;
     }
     wielomian z=malloc(sizeof(Wielomian));
@@ -152,10 +154,10 @@ wielomian multiply(wielomian v, wielomian y){
 }
 
 
-//TODO fix divide() function
+
 wielomian divide(wielomian v, wielomian y,wielomian r,bool delete){
     if(v->size>1&&y->size>1&&v->var[0]!=y->var[0]){
-        g_print("unsupported action");
+        msg("unsupported action");
         return NULL;
     }
     wielomian z=malloc(sizeof(Wielomian));
@@ -206,7 +208,7 @@ bool greater_than(wielomian v, wielomian y){
         return false;
     }
     if(v->size>1&&y->size>1&&v->var[0]!=y->var[0]){
-        g_print("unsupported action");
+        msg("unsupported action");
         return false;
     }
     if(v->size>y->size){
@@ -220,7 +222,7 @@ bool greater_than(wielomian v, wielomian y){
 
 wielomian nwd(wielomian v, wielomian y){
     if(v->size>1&&y->size>1&&v->var[0]!=y->var[0]){
-        g_print("unsupported action");
+        msg("unsupported action");
         return NULL;
     }
     wielomian a=copy(v);
@@ -234,7 +236,7 @@ wielomian nwd(wielomian v, wielomian y){
     zero->var[0]=b->var[0];
     while(greater_than(b,zero)){
         wielomian a1=a;
-        wielomian temp=divide(a,b,r,false);       //TODO z jakiegoś powodu divide() nie zmienia wartości r
+        wielomian temp=divide(a,b,r,false);
         del(temp);
         a=b;
         b=r;

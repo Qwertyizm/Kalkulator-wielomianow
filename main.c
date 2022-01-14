@@ -62,11 +62,28 @@ static void make_window(){
 }
 
 
+
+void msg (gchar *message){
+    GtkWidget *dialog, *label, *content_area;
+    GtkDialogFlags flags;
+
+    flags = GTK_DIALOG_MODAL;
+
+    dialog = gtk_dialog_new_with_buttons ("Błąd",NULL,flags,"_OK",GTK_RESPONSE_NONE,NULL);
+    content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+    label = gtk_label_new (message);
+
+    g_signal_connect_swapped (dialog,"response",G_CALLBACK (gtk_widget_destroy),dialog);
+
+    gtk_container_add (GTK_CONTAINER (content_area), label);
+    gtk_widget_show_all (dialog);
+}
+
+
 int main( int argc,char *argv[] ){
 
     gtk_init(&argc, &argv);
     make_window();
-
     gtk_main();
     return 0;
 }
