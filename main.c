@@ -45,15 +45,14 @@ G_MODULE_EXPORT void test_nacisniecia(GtkWidget *widget){
 G_MODULE_EXPORT void dodaj_do_text(GtkWidget *widget, gpointer data) {
     gint tmp_pos = gtk_entry_get_text_length(GTK_ENTRY(data));
     gtk_editable_insert_text(GTK_EDITABLE(data), gtk_button_get_label(GTK_BUTTON(widget)), -1, &tmp_pos);
-    if(strcmp(gtk_button_get_label(GTK_BUTTON(widget)),"compute")==0||strcmp(gtk_button_get_label(GTK_BUTTON(widget)),"GCD")==0||strcmp(gtk_button_get_label(GTK_BUTTON(widget)),"zero")==0||strcmp(gtk_button_get_label(GTK_BUTTON(widget)),"derivative")==0){
+    if(strcmp(gtk_button_get_label(GTK_BUTTON(widget)),"compute")==0||strcmp(gtk_button_get_label(GTK_BUTTON(widget)),"GCD")==0||strcmp(gtk_button_get_label(GTK_BUTTON(widget)),"m_zero")==0||strcmp(gtk_button_get_label(GTK_BUTTON(widget)),"derivative")==0){
         tmp_pos = gtk_entry_get_text_length(GTK_ENTRY(data));
         gtk_editable_insert_text(GTK_EDITABLE(data), "(", -1, &tmp_pos);
     }
 }
 static void make_window(){
     GtkBuilder* builder=gtk_builder_new_from_file("Builder.glade");
-    int my_user_data = 0xDEADBEEF;  //podpięcie sygnałów
-    gtk_builder_connect_signals(builder, &my_user_data);
+    gtk_builder_connect_signals(builder, NULL);
     GObject* window=gtk_builder_get_object(builder,"window");
     GtkWidget* wejscie=GTK_WIDGET(gtk_builder_get_object(builder,"Wejscie"));
     GtkWidget* wynik;
