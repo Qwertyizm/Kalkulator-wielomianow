@@ -11,8 +11,8 @@ struct Wielomian1d{
 
 
 int max(int a, int b);
-char* print(wielomian v);
-wielomian compute(wielomian v, wielomian x);
+char* print(wielomian v,bool delete);
+double compute(wielomian v, wielomian x,bool delete);
 wielomian copy(wielomian x);
 wielomian add(wielomian v, wielomian y);
 wielomian sub(wielomian v, wielomian y);
@@ -20,6 +20,9 @@ wielomian multiply(wielomian v, wielomian y);
 wielomian divide(wielomian v, wielomian y,wielomian r,bool delete);
 bool greater_than(wielomian v, wielomian y);
 wielomian nwd(wielomian v, wielomian y);
+wielomian derivative(wielomian v);
+wielomian m_zero(wielomian v);
+wielomian from_d_to_w(double d);
 void del(wielomian v);
 
 

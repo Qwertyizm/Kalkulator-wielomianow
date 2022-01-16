@@ -16,8 +16,8 @@ int max(int a, int b){
 
 
 
-char* print(wielomian v){
-    char* wynik=malloc((8*v->size)*sizeof(char));
+char* print(wielomian v,bool delete){
+    char* wynik=g_malloc((8*v->size)*sizeof(char));
     *wynik='\0';
     char temp[30];
     *temp='\0';
@@ -31,23 +31,25 @@ char* print(wielomian v){
             strcat(wynik,"+");
         }
     }
-    sprintf(temp,"%.2f",v->val[v->size-1]);
+    sprintf(temp,"%.4f",v->val[v->size-1]);
     strcat(wynik,temp);
-    del(v);
+    if(delete){
+        del(v);
+    }
+
     return wynik;
 }
 
-wielomian compute(wielomian v, wielomian x){
-    wielomian wynik=malloc(sizeof(Wielomian));
-    wynik->size=1;
-    double* w_tab=calloc(1,sizeof(double));
+double compute(wielomian v, wielomian x,bool delete){
+    double wynik=0;
     for(int i=0;i<v->size;i++){
-        w_tab[0]*=x->val[0];
-        w_tab[0]+=v->val[i];
+        wynik*=x->val[0];
+        wynik+=v->val[i];
     }
-    wynik->val=w_tab;
-    del(v);
-    del(x);
+    if(delete){
+        del(v);
+        del(x);
+    }
     return wynik;
 }
 
@@ -172,10 +174,8 @@ wielomian divide(wielomian v, wielomian y,wielomian r,bool delete){
     wielomian temp=copy(v);
     *r=*temp;
     if(z->size<=0){
-        z->size=1;
-        double* tab=calloc(1,sizeof(double));
-        tab[0]=0;
-        z->val=tab;
+        free(z);
+        z=from_d_to_w(0);
         return z;
     }
     double* tab=calloc(z->size,sizeof(double));
@@ -228,12 +228,7 @@ wielomian nwd(wielomian v, wielomian y){
     wielomian a=copy(v);
     wielomian b=copy(y);
     wielomian r=NULL;
-    wielomian zero=malloc(sizeof(Wielomian));
-    zero->size=1;
-    double* z_tab=calloc(1,sizeof(double));
-    z_tab[0]=0;
-    zero->val=z_tab;
-    zero->var[0]=b->var[0];
+    wielomian zero=from_d_to_w(0);
     while(greater_than(b,zero)){
         wielomian a1=a;
         wielomian temp=divide(a,b,r,false);
@@ -254,6 +249,53 @@ wielomian nwd(wielomian v, wielomian y){
     del(v);
     del(y);
     return a;
+}
+
+wielomian derivative(wielomian v){
+    wielomian wynik=malloc(sizeof(Wielomian));
+    if(v->size==1){
+        wynik=from_d_to_w(0);
+    }
+    else{
+        wynik->size=v->size-1;
+        wynik->var[0]=v->var[0];
+        double* temp_tab=calloc(wynik->size,sizeof(double));
+        for(int i=0;i<wynik->size;i++){
+            temp_tab[i]=v->val[i]*(v->size-1-i);
+        }
+        wynik->val=temp_tab;
+    }
+    return wynik;
+}
+
+double abs_d(double d){
+    if(d<0){
+        return -d;
+    }
+    return d;
+}
+
+wielomian m_zero(wielomian v){
+    wielomian pochodna=derivative(v);
+    double punkt_pocztkowy=5;
+    double temp=0;
+    double dokladnosc=0.0001;
+    do{
+        temp=punkt_pocztkowy;
+        wielomian t=from_d_to_w(temp);
+        punkt_pocztkowy=temp-(compute(v,t,false))/(compute(pochodna,t,false));
+        free(t);
+    }while(abs_d(punkt_pocztkowy-temp)>=dokladnosc);
+    return from_d_to_w(punkt_pocztkowy);
+}
+
+wielomian from_d_to_w(double d){
+    wielomian wynik=malloc(sizeof(Wielomian));
+    wynik->size=1;
+    double* temp_tab=calloc(1,sizeof(double));
+    temp_tab[0]=d;
+    wynik->val=temp_tab;
+    return wynik;
 }
 
 void del(wielomian v){
