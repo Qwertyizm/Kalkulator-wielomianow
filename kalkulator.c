@@ -18,7 +18,7 @@ wielomian oblicz(char *wejscie, wielomian w2)
     int z;
     char *inptr=wejscie;
     wielomian wynik=NULL;
-    
+
     if((z=czytaj_znak(&inptr)) != EOF) {
         zwroc_znak(z,&inptr);
         wynik=wyrazenie(&inptr,w2);
@@ -38,7 +38,7 @@ static void zwroc_znak(int z, char **inp)
 static int czytaj_znak(char **inp)
 {
     int z;
-    
+
     if (**inp == '\0') return EOF;
     while ((z=*(*inp)++) != '\0' && isspace(z)) ;
     if (isdigit(z) || z == '.' || z == 'x'|| z == 'y'|| z == 'z') {
@@ -106,11 +106,7 @@ static wielomian wyrazenie(char **inp, wielomian w2)
     wyn=skladnik(inp,w2);
 
     if (z == '-'){
-        wielomian zero=malloc(sizeof(Wielomian));
-        zero->size=1;
-        double* zero_tab=calloc(1,sizeof(double));
-        *zero_tab=0;
-        zero->val=zero_tab;
+        wielomian zero=from_d_to_w(0);
         wyn=sub(zero,wyn);
     }
 
@@ -118,7 +114,7 @@ static wielomian wyrazenie(char **inp, wielomian w2)
         x2=skladnik(inp,w2);
         wyn=(z == '+' ? add(wyn,x2) : sub(wyn,x2));
     }
-    zwroc_znak(z, inp);        
+    zwroc_znak(z, inp);
     return wyn;
 }
 
@@ -126,24 +122,30 @@ static wielomian skladnik(char **inp,wielomian w2)
 {
     int z,c;
     wielomian wyn,x2;
-    if((z=czytaj_znak(inp))=='c'||z=='G'){
-        while((c=*(*inp)++)!='\0'&& isalpha(c));
-        if(c=='('){
-            wyn=czynnik(inp);
-            (*inp)++; //ignore ','
-            x2=czynnik(inp);
-            if((c=czytaj_znak(inp))==')'){
-                wyn=(z=='c' ? compute(wyn,x2) : nwd(wyn,x2));
+    if((z=czytaj_znak(inp))=='c'||z=='G'||z=='m'||z=='d'){
+        while((c=*(*inp)++)!='\0'&& (isalpha(c)||c=='_'));
+            if(z=='m'||z=='d'){
+                zwroc_znak(c,inp);
+                wyn=czynnik(inp);
+                wyn=(z=='m' ? m_zero(wyn) : derivative(wyn,true));
             }
             else{
-                msg("Brakuje nawiasu");
-                return NULL;
+                if(c=='('){
+                    wyn=czynnik(inp);
+                    (*inp)++; //ignore ','
+                    x2=czynnik(inp);
+                    if((c=czytaj_znak(inp))==')'){
+                        wyn=(z=='c' ? from_d_to_w(compute(wyn,x2,true)) : nwd(wyn,x2));
+                    }
+                    else{
+                        msg("Brakuje nawiasu");
+                        return NULL;
+                    }
+                }
+                else{
+                    msg("Błędna składnia");
+                }
             }
-        }
-        else{
-            msg("Niewłaściwa składnia");
-            return NULL;
-        }
     }
     else{
         zwroc_znak(z,inp);
