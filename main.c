@@ -11,7 +11,7 @@ typedef struct {
     GtkWidget *reszta;
 } paczka;
 
-//TODO find why program works in debug but not in release
+
 
 G_MODULE_EXPORT void oblicz_wyrazenie(GtkWidget *widget, paczka *data) {
     gchar wejscie[100 + 2];
@@ -20,14 +20,22 @@ G_MODULE_EXPORT void oblicz_wyrazenie(GtkWidget *widget, paczka *data) {
     wielomian w2 = g_malloc(sizeof(Wielomian));
     w2->size = 0;
     w1 = oblicz(wejscie, w2);
-    //TODO fix memory leaks: error -1073740940 (0xC0000374) == heap_corruption
+
     if (w1 != NULL) {
-        gtk_entry_set_text(GTK_ENTRY(data->wyjscie), (gchar *) print(w1, true));
+        gchar* temp=print(w1,true);
+        gchar* text=g_malloc(strlen(temp)*sizeof(gchar)+1);
+        sprintf(text,temp);
+        free(temp);
+        gtk_entry_set_text(GTK_ENTRY(data->wyjscie), text);
     } else {
         gtk_entry_set_text(GTK_ENTRY(data->wyjscie), "0");
     }
-    if (w2->size != 0) {
-        gtk_entry_set_text(GTK_ENTRY(data->reszta), (gchar *) print(w2, true));
+    if (w2!=NULL&&(w2->size != 0)) {
+        gchar* temp=print(w2,true);
+        gchar* text=g_malloc(strlen(temp)*sizeof(gchar)+1);
+        sprintf(text,temp);
+        free(temp);
+        gtk_entry_set_text(GTK_ENTRY(data->reszta), text);
     } else {
         gtk_entry_set_text(GTK_ENTRY(data->reszta), "0");
     }
