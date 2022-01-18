@@ -11,7 +11,6 @@ typedef struct {
 } paczka;
 
 
-
 G_MODULE_EXPORT void oblicz_wyrazenie(GtkWidget *widget, paczka *data) {
     gchar wejscie[100 + 2];
     strcpy(wejscie, gtk_entry_get_text(GTK_ENTRY(data->wejscie)));
@@ -21,17 +20,19 @@ G_MODULE_EXPORT void oblicz_wyrazenie(GtkWidget *widget, paczka *data) {
     w1 = oblicz(wejscie, w2);
 
     if (w1 != NULL) {
-        gchar* temp=print(w1,true);
+        gchar *temp = print(w1, true);
         gtk_entry_set_text(GTK_ENTRY(data->wyjscie), temp);
         free(temp);
+        del(w1);
     } else {
         gtk_entry_set_text(GTK_ENTRY(data->wyjscie), "0");
     }
-    if (w2!=NULL&&(w2->size != 0)) {
-        gchar* temp=print(w2,true);
+    if (w2 != NULL && (w2->size != 0)) {
+        gchar *temp = print(w2, true);
         gtk_entry_set_text(GTK_ENTRY(data->reszta), temp);
         free(temp);
     } else {
+        del(w2);
         gtk_entry_set_text(GTK_ENTRY(data->reszta), "0");
     }
 }
@@ -53,9 +54,11 @@ G_MODULE_EXPORT void dodaj_do_text(GtkWidget *widget, gpointer data) {
     }
 }
 
-G_MODULE_EXPORT void clear_text(GtkWidget *widget, gpointer data){
-    gtk_entry_set_text(data,"");
+G_MODULE_EXPORT void clear_text(GtkWidget *widget, gpointer data) {
+    gtk_entry_set_text(data, "");
 }
+
+
 
 static void make_window() {
     GtkBuilder *builder = gtk_builder_new_from_file("Builder.glade");
@@ -72,7 +75,8 @@ static void make_window() {
     okienka->wejscie = wejscie;
     okienka->wyjscie = wynik;
     okienka->reszta = reszta;
-    g_signal_connect(GTK_BUTTON(gtk_builder_get_object(builder, "Enter")), "clicked", G_CALLBACK(oblicz_wyrazenie),okienka);
+    g_signal_connect(GTK_BUTTON(gtk_builder_get_object(builder, "Enter")), "clicked", G_CALLBACK(oblicz_wyrazenie),
+                     okienka);
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
     gtk_widget_show_all(GTK_WIDGET(window));
 }
