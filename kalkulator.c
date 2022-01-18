@@ -28,7 +28,7 @@ wielomian oblicz(char *wejscie, wielomian w2) {
 }
 
 static void zwroc_znak(int z, char **inp) {
-    if (z != EOF&&z!=WIELOMIAN)
+    if (z != EOF && z != WIELOMIAN)
         --*inp;
 }
 
@@ -59,8 +59,8 @@ static wielomian czytaj_wielomian(char **inp) {
         }
     }
 
-    for(int i=0;i<3;i++){
-        w->var[i]=1;
+    for (int i = 0; i < 3; i++) {
+        w->var[i] = 1;
     }
     w->size = 1;
 
@@ -68,8 +68,8 @@ static wielomian czytaj_wielomian(char **inp) {
         if (n == 0.0) {
             n = 1.0;
         }
-        zwroc_znak(z,inp);
-        while((z=*(*inp)++)=='x'||z=='y'||z=='z'){
+        zwroc_znak(z, inp);
+        while ((z = *(*inp)++) == 'x' || z == 'y' || z == 'z') {
             int pow = 0;
             int c;
             if (*(*inp) == '^') {
@@ -83,19 +83,23 @@ static wielomian czytaj_wielomian(char **inp) {
             }
             switch (z) {
                 case 'x':
-                    w->var[0]=pow+1;
-                    w->size*=pow+1;
+                    w->var[0] = pow + 1;
+                    w->size *= pow + 1;
                     break;
                 case 'y':
-                    w->var[1]=pow+1;
-                    w->size*=pow+1;
+                    w->var[1] = pow + 1;
+                    w->size *= pow + 1;
                     break;
                 case 'z':
-                    w->var[2]=pow+1;
-                    w->size*=pow+1;
+                    w->var[2] = pow + 1;
+                    w->size *= pow + 1;
+                    break;
+                default:
+                    msg("Niespodziewany błąd");
+                    return NULL;
             }
         }
-        zwroc_znak(z==0?EOF:z,inp);
+        zwroc_znak(z == 0 ? EOF : z, inp);
         double *tab = calloc(w->size, sizeof(double));
         *tab = n / pot10;
         w->val = tab;
@@ -131,30 +135,47 @@ static wielomian wyrazenie(char **inp, wielomian w2) {
 
 static wielomian skladnik(char **inp, wielomian w2) {
     int z, c;
-    wielomian wyn, x2;
+    wielomian wyn, x2,x3,x4;
+    //TODO dodać wczytywanie kolejnych wartości zmiennych dla compute()
     if ((z = czytaj_znak(inp)) == 'c' || z == 'G' || z == 'm' || z == 'd') {
         while ((c = *(*inp)++) != '\0' && (isalpha(c) || c == '_'));
 
-        wyn = wyrazenie(inp,NULL);
+        wyn = wyrazenie(inp, NULL);
         if (c == '(') {
             if (z == 'm' || z == 'd') {
                 if ((c = czytaj_znak(inp)) == ')') {
                     wyn = (z == 'm' ? m_zero(wyn) : derivative(wyn, true));
-                }else {
+                } else {
                     msg("Brakuje nawiasu");
                     return NULL;
                 }
             } else {
-                if(*(*inp)==','){
+                if (*(*inp) == ',') {
                     (*inp)++; //ignore ','
-                }else{
+                } else {
                     msg("Brakuje przecinka");
                     return NULL;
                 }
-                x2 = wyrazenie(inp,NULL);
+                x2 = wyrazenie(inp, NULL);
+                if(z=='c'){
+                    if (*(*inp) == ',') {
+                        (*inp)++; //ignore ','
+                    } else {
+                        msg("Brakuje przecinka");
+                        return NULL;
+                    }
+                    x3=wyrazenie(inp,NULL);
+                    if (*(*inp) == ',') {
+                        (*inp)++; //ignore ','
+                    } else {
+                        msg("Brakuje przecinka");
+                        return NULL;
+                    }
+                    x4=wyrazenie(inp,NULL);
+                }
                 if ((c = czytaj_znak(inp)) == ')') {
-                    wyn = (z == 'c' ? from_d_to_w(compute(wyn, x2, NULL,NULL,true)) : nwd(wyn, x2));
-                }else {
+                    wyn = (z == 'c' ? from_d_to_w(compute(wyn, x2, x3, x4, true)) : nwd(wyn, x2));
+                } else {
                     msg("Brakuje nawiasu");
                     return NULL;
                 }
