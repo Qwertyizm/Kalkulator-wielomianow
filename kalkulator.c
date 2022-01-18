@@ -9,7 +9,7 @@ extern void msg(gchar *message);
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "LoopDoesntUseConditionVariableInspection"
-#define WIELOMIAN '0'
+#define WIELOMIAN '~'
 
 
 /***************** DEFINICJE FUNKCJI ********************/
@@ -28,7 +28,7 @@ wielomian oblicz(char *wejscie, wielomian w2) {
 }
 
 static void zwroc_znak(int z, char **inp) {
-    if (z != EOF && z != WIELOMIAN)
+    if (z != EOF&&z!=WIELOMIAN)
         --*inp;
 }
 
@@ -58,30 +58,48 @@ static wielomian czytaj_wielomian(char **inp) {
             pot10 *= 10.0;
         }
     }
+
+    for(int i=0;i<3;i++){
+        w->var[i]=1;
+    }
+    w->size = 1;
+
     if (z == 'x' || z == 'y' || z == 'z') {
         if (n == 0.0) {
             n = 1.0;
         }
-        w->var[0] = z;
-        int pow = 0;
-        if (*(*inp) == '^') {
-            (*inp)++;
-            while ((z = *(*inp)++) != '\0' && isdigit(z)) {
-                pow = 10 * pow + (z - '0');
+        zwroc_znak(z,inp);
+        while((z=*(*inp)++)=='x'||z=='y'||z=='z'){
+            int pow = 0;
+            int c;
+            if (*(*inp) == '^') {
+                (*inp)++;
+                while ((c = *(*inp)++) != '\0' && isdigit(c)) {
+                    pow = 10 * pow + (c - '0');
+                }
+                zwroc_znak(c == 0 ? EOF : c, inp);
+            } else {
+                pow = 1;
             }
-            zwroc_znak(z == 0 ? EOF : z, inp);
-        } else {
-            pow = 1;
+            switch (z) {
+                case 'x':
+                    w->var[0]=pow+1;
+                    w->size*=pow+1;
+                    break;
+                case 'y':
+                    w->var[1]=pow+1;
+                    w->size*=pow+1;
+                    break;
+                case 'z':
+                    w->var[2]=pow+1;
+                    w->size*=pow+1;
+            }
         }
-        w->size = pow + 1;
-        double *tab = malloc(w->size * sizeof(double));
+        zwroc_znak(z==0?EOF:z,inp);
+        double *tab = calloc(w->size, sizeof(double));
         *tab = n / pot10;
-        for (int i = 1; i < w->size; i++) {
-            *(tab + i) = 0;
-        }
         w->val = tab;
     } else {
-        w->size = 1;
         double *tab = malloc(sizeof(double));
         tab[0] = n / pot10;
         w->val = tab;
@@ -127,10 +145,15 @@ static wielomian skladnik(char **inp, wielomian w2) {
                     return NULL;
                 }
             } else {
-                (*inp)++; //ignore ','
+                if(*(*inp)==','){
+                    (*inp)++; //ignore ','
+                }else{
+                    msg("Brakuje przecinka");
+                    return NULL;
+                }
                 x2 = wyrazenie(inp,NULL);
                 if ((c = czytaj_znak(inp)) == ')') {
-                    wyn = (z == 'c' ? from_d_to_w(compute(wyn, x2, true)) : nwd(wyn, x2));
+                    wyn = (z == 'c' ? from_d_to_w(compute(wyn, x2, NULL,NULL,true)) : nwd(wyn, x2));
                 }else {
                     msg("Brakuje nawiasu");
                     return NULL;
