@@ -1,5 +1,4 @@
 #include "kalkulator.h"
-
 #include <gtk/gtk.h>
 #include <string.h>
 
@@ -23,19 +22,15 @@ G_MODULE_EXPORT void oblicz_wyrazenie(GtkWidget *widget, paczka *data) {
 
     if (w1 != NULL) {
         gchar* temp=print(w1,true);
-        gchar* text=g_malloc(strlen(temp)*sizeof(gchar)+1);
-        sprintf(text,temp);
+        gtk_entry_set_text(GTK_ENTRY(data->wyjscie), temp);
         free(temp);
-        gtk_entry_set_text(GTK_ENTRY(data->wyjscie), text);
     } else {
         gtk_entry_set_text(GTK_ENTRY(data->wyjscie), "0");
     }
     if (w2!=NULL&&(w2->size != 0)) {
         gchar* temp=print(w2,true);
-        gchar* text=g_malloc(strlen(temp)*sizeof(gchar)+1);
-        sprintf(text,temp);
+        gtk_entry_set_text(GTK_ENTRY(data->reszta), temp);
         free(temp);
-        gtk_entry_set_text(GTK_ENTRY(data->reszta), text);
     } else {
         gtk_entry_set_text(GTK_ENTRY(data->reszta), "0");
     }
