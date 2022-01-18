@@ -14,7 +14,7 @@ int max(int a, int b);
 
 char *print(wielomian v, bool delete);
 
-double compute(wielomian v, wielomian x,wielomian y, wielomian z, bool delete);
+double compute(wielomian v, wielomian x, wielomian y, wielomian z, bool delete);
 
 wielomian copy(wielomian x);
 
@@ -38,8 +38,8 @@ wielomian from_d_to_w(double d);
 
 void del(wielomian v);
 
+void uprosc(wielomian v);
 
-//TODO  we're going to store up to 3 dimensions in linear form knowing sizes of each dimension
 int from_kart_to_linear(int x, int y, int z, int xs, int ys);
 
 
