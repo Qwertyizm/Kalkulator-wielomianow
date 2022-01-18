@@ -185,6 +185,7 @@ wielomian add(wielomian v, wielomian y) {
         }
     }
     z->val = tab;
+    uprosc(z);
     del(v);
     del(y);
     return z;
@@ -257,6 +258,7 @@ wielomian multiply(wielomian v, wielomian y) {
         }
     }
     z->val = tab;
+    uprosc(z);
     del(v);
     del(y);
     return z;
@@ -395,6 +397,7 @@ wielomian nwd(wielomian v, wielomian y) {
     }
     del(v);
     del(y);
+    uprosc(a);
     return a;
 }
 
@@ -424,6 +427,7 @@ wielomian derivative(wielomian v, bool delete) {
     if (delete) {
         del(v);
     }
+    uprosc(wynik);
     return wynik;
 }
 
@@ -471,6 +475,7 @@ wielomian m_zero(wielomian v) {
     } while (abs_d(punkt_pocztkowy - temp) >= dokladnosc);
     del(pochodna);
     del(v);
+
     return from_d_to_w(punkt_pocztkowy);
 }
 
