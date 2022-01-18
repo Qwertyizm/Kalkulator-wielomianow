@@ -136,7 +136,7 @@ static wielomian wyrazenie(char **inp, wielomian w2) {
 static wielomian skladnik(char **inp, wielomian w2) {
     int z, c;
     wielomian wyn, x2,x3,x4;
-    //TODO dodać wczytywanie kolejnych wartości zmiennych dla compute()
+
     if ((z = czytaj_znak(inp)) == 'c' || z == 'G' || z == 'm' || z == 'd') {
         while ((c = *(*inp)++) != '\0' && (isalpha(c) || c == '_'));
 
