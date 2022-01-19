@@ -14,7 +14,6 @@ int max(int a, int b) {
     return b;
 }
 
-
 int from_kart_to_linear(int x, int y, int z, int xs, int ys) {
     return xs * (ys * z + y) + x;
 }
@@ -102,7 +101,6 @@ char *print(wielomian v, bool delete) {
 
     return wynik;
 }
-
 
 double compute(wielomian v, wielomian x, wielomian y, wielomian z, bool delete) {
     double wynik = 0;
@@ -263,7 +261,6 @@ wielomian multiply(wielomian v, wielomian y) {
     del(y);
     return z;
 }
-
 
 wielomian divide(wielomian v, wielomian y, wielomian r, bool delete) {
     if (v == NULL || y == NULL ) {
@@ -444,7 +441,7 @@ wielomian m_zero(wielomian v) {
         return NULL;
     }
     wielomian pochodna = derivative(v, false);
-    double punkt_pocztkowy = 5;
+    double punkt_poczatkowy = 5;
     double temp = 0;
     double dokladnosc = 0.0001;
     int pot = 0;
@@ -455,28 +452,28 @@ wielomian m_zero(wielomian v) {
         }
     }
     do {
-        temp = punkt_pocztkowy;
+        temp = punkt_poczatkowy;
         wielomian t = from_d_to_w(temp);
         switch (pot) {
             case 0:
-                punkt_pocztkowy = temp - (compute(v, t, NULL, NULL, false)) / (compute(pochodna, t, NULL, NULL, false));
+                punkt_poczatkowy = temp - (compute(v, t, NULL, NULL, false)) / (compute(pochodna, t, NULL, NULL, false));
                 break;
             case 1:
-                punkt_pocztkowy = temp - (compute(v, NULL, t, NULL, false)) / (compute(pochodna, NULL, t, NULL, false));
+                punkt_poczatkowy = temp - (compute(v, NULL, t, NULL, false)) / (compute(pochodna, NULL, t, NULL, false));
                 break;
             case 2:
-                punkt_pocztkowy = temp - (compute(v, NULL, NULL, t, false)) / (compute(pochodna, NULL, NULL, t, false));
+                punkt_poczatkowy = temp - (compute(v, NULL, NULL, t, false)) / (compute(pochodna, NULL, NULL, t, false));
                 break;
             default:
                 msg("Niespodziewany błąd");
                 return NULL;
         }
         free(t);
-    } while (abs_d(punkt_pocztkowy - temp) >= dokladnosc);
+    } while (abs_d(punkt_poczatkowy - temp) >= dokladnosc);
     del(pochodna);
     del(v);
 
-    return from_d_to_w(punkt_pocztkowy);
+    return from_d_to_w(punkt_poczatkowy);
 }
 
 wielomian from_d_to_w(double d) {

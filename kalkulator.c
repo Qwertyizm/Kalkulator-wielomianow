@@ -4,15 +4,10 @@
 #include <gtk/gtk.h>
 #include "kalkulator.h"
 
-
 extern void msg(gchar *message);
-
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "LoopDoesntUseConditionVariableInspection"
 #define WIELOMIAN '~'
 
 
-/***************** DEFINICJE FUNKCJI ********************/
 wielomian oblicz(char *wejscie, wielomian w2) {
     int z;
     char *inptr = wejscie;
@@ -212,4 +207,3 @@ static wielomian czynnik(char **inp) {
     return NULL;
 }
 
-#pragma clang diagnostic pop

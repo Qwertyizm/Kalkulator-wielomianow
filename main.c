@@ -38,7 +38,7 @@ G_MODULE_EXPORT void oblicz_wyrazenie(GtkWidget *widget, paczka *data) {
 }
 
 G_MODULE_EXPORT void test_nacisniecia(GtkWidget *widget) {
-    g_print("GTK-test - %s zastal nacisniety\n", (gchar *) gtk_button_get_label((GtkButton *) widget));
+    g_print("GTK-test - %s zostal nacisniety\n", (gchar *) gtk_button_get_label((GtkButton *) widget));
 }
 
 
