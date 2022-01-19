@@ -65,6 +65,7 @@ char *print(wielomian v, bool delete) {
 
                 if (v->var[0] - 1 > i) {
                     strcat(wynik, "x");
+                    czy_pierwszy = true;
                     int pot = v->var[0] - 1 - i;
                     if (pot != 1) {
                         sprintf(temp, "^%i", pot);
@@ -73,6 +74,7 @@ char *print(wielomian v, bool delete) {
                 }
                 if (v->var[1] - 1 > ii) {
                     strcat(wynik, "y");
+                    czy_pierwszy = true;
                     int pot = v->var[1] - 1 - ii;
                     if (pot != 1) {
                         sprintf(temp, "^%i", pot);
@@ -81,6 +83,7 @@ char *print(wielomian v, bool delete) {
                 }
                 if (v->var[2] - 1 > iii) {
                     strcat(wynik, "z");
+                    czy_pierwszy = true;
                     int pot = v->var[2] - 1 - iii;
                     if (pot != 1) {
                         sprintf(temp, "^%i", pot);
@@ -295,17 +298,16 @@ wielomian divide(wielomian v, wielomian y, wielomian r, bool delete) {
     bool done_something=true;
     while(done_something){
         done_something=false;
-        for(int i=0;i<v->var[0]-y->var[0]+1;i++){
-            for(int ii=0;ii<v->var[1]-y->var[1]+1;ii++){
-                for(int iii=0;iii<v->var[2]-y->var[2]+1;iii++){
+        for(int i=0;i<v->var[0]-y->var[0]+2&&i<v->var[0];i++){
+            for(int ii=0;ii<v->var[1]-y->var[1]+2&&ii<v->var[1];ii++){
+                for(int iii=0;iii<v->var[2]-y->var[2]+2&&iii<v->var[2];iii++){
                     double wartx=r->val[from_kart_to_linear(i,ii,iii,r->var[0],r->var[1])];
                     if(wartx!=0){
-                        done_something=true;
                         bool found=false;
                         int potx,poty,potz;
-                        for(int j=0;j<=i;j++){
-                            for(int jj=0;jj<=ii;jj++){
-                                for(int jjj=0;jjj<=iii;jjj++){
+                        for(int j=0;j<=i&&j<y->var[0];j++){
+                            for(int jj=0;jj<=ii&&jj<y->var[1];jj++){
+                                for(int jjj=0;jjj<=iii&&jjj<y->var[2];jjj++){
                                     double warty=y->val[from_kart_to_linear(j,jj,jjj,y->var[0],y->var[1])];
                                     if(warty!=0){
                                         found=true;
@@ -313,6 +315,9 @@ wielomian divide(wielomian v, wielomian y, wielomian r, bool delete) {
                                         potx=v->var[0]-i-(y->var[0]-j);
                                         poty=v->var[1]-ii-(y->var[1]-jj);
                                         potz=v->var[2]-iii-(y->var[2]-jjj);
+                                        if(potx<0||poty<0||potz<0){
+                                            found=false;
+                                        }
                                     }
                                     if(found) break;
                                 }
@@ -321,18 +326,16 @@ wielomian divide(wielomian v, wielomian y, wielomian r, bool delete) {
                             if(found) break;
                         }
                         if(found){
-                            tab[from_kart_to_linear(z->var[0]-(potx+1),z->var[1]-(poty+1),z->var[2]-(potz+1),z->var[0],z->var[1])]+=wartx;
+                            done_something=true;
+                            tab[from_kart_to_linear(z->var[0]-(potx+1),z->var[1]-poty-1,z->var[2]-potz-1,z->var[0],z->var[1])]+=wartx;
                             for(int j=0;j<y->var[0];j++){
                                 for(int jj=0;jj<y->var[1];jj++){
                                     for(int jjj=0;jjj<y->var[2];jjj++){
-                                        r->val[from_kart_to_linear(i+j,ii+jj,iii+jjj,r->var[0],r->var[1])]-=
+                                        r->val[from_kart_to_linear(v->var[0]-1-((y->var[0]-1-j)+potx),v->var[1]-((y->var[1]-jj)+poty),v->var[2]-((y->var[2]-jjj)+potz),r->var[0],r->var[1])]-=
                                                 wartx*y->val[from_kart_to_linear(j,jj,jjj,y->var[0],y->var[1])];
                                     }
                                 }
                             }
-                        }else{
-                            msg("Nieoczekiwany błąd");
-                            return NULL;
                         }
 
                     }

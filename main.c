@@ -23,8 +23,8 @@ G_MODULE_EXPORT void oblicz_wyrazenie(GtkWidget *widget, paczka *data) {
         gchar *temp = print(w1, true);
         gtk_entry_set_text(GTK_ENTRY(data->wyjscie), temp);
         free(temp);
-        del(w1);
     } else {
+        del(w2);
         gtk_entry_set_text(GTK_ENTRY(data->wyjscie), "0");
     }
     if (w2 != NULL && (w2->size != 0)) {
