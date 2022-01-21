@@ -402,7 +402,7 @@ wielomian nwd(wielomian v, wielomian y) {
 }
 
 wielomian derivative(wielomian v, bool delete) {
-    if (((v->val[0] > 1) + (v->val[1] > 1) + (v->val[2] > 1)) > 1) {
+    if (((v->var[0] > 1) + (v->var[1] > 1) + (v->var[2] > 1)) > 1) {
         msg("unsupported action");
         return NULL;
     }
@@ -439,7 +439,7 @@ double abs_d(double d) {
 }
 
 wielomian m_zero(wielomian v) {
-    if (((v->val[0] > 1) + (v->val[1] > 1) + (v->val[2] > 1)) > 1) {
+    if (((v->var[0] > 1) + (v->var[1] > 1) + (v->var[2] > 1)) > 1) {
         msg("unsupported action");
         return NULL;
     }

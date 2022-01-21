@@ -17,6 +17,7 @@ G_MODULE_EXPORT void oblicz_wyrazenie(GtkWidget *widget, paczka *data) {
     wielomian w1 = NULL;
     wielomian w2 = g_malloc(sizeof(Wielomian));
     w2->size = 0;
+    w2->val=NULL;
     w1 = oblicz(wejscie, w2);
 
     if (w1 != NULL) {
@@ -24,7 +25,6 @@ G_MODULE_EXPORT void oblicz_wyrazenie(GtkWidget *widget, paczka *data) {
         gtk_entry_set_text(GTK_ENTRY(data->wyjscie), temp);
         free(temp);
     } else {
-        del(w2);
         gtk_entry_set_text(GTK_ENTRY(data->wyjscie), "0");
     }
     if (w2 != NULL && (w2->size != 0)) {
