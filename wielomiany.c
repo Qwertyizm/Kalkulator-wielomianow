@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-//#include <fcntl.h>
 #include "wielomiany.h"
 #include <gtk/gtk.h>
 
@@ -305,6 +304,7 @@ wielomian divide(wielomian v, wielomian y, wielomian r, bool delete) {
                     if(wartx!=0){
                         bool found=false;
                         int potx,poty,potz;
+
                         for(int j=0;j<=i&&j<y->var[0];j++){
                             for(int jj=0;jj<=ii&&jj<y->var[1];jj++){
                                 for(int jjj=0;jjj<=iii&&jjj<y->var[2];jjj++){
@@ -325,6 +325,7 @@ wielomian divide(wielomian v, wielomian y, wielomian r, bool delete) {
                             }
                             if(found) break;
                         }
+
                         if(found){
                             done_something=true;
                             tab[from_kart_to_linear(z->var[0]-(potx+1),z->var[1]-poty-1,z->var[2]-potz-1,z->var[0],z->var[1])]+=wartx;
@@ -447,12 +448,16 @@ wielomian m_zero(wielomian v) {
     double punkt_poczatkowy = 5;
     double temp = 0;
     double dokladnosc = 0.0001;
-    int pot = 0;
+    int pot = -1;
     for (int i = 0; i < 3; i++) {
-        if (v->val[i] > 1) {
+        if (v->var[i] > 1) {
             pot = i;
             break;
         }
+    }
+    if(pot==-1){
+        msg("Brak miejsca zerowego");
+        return NULL;
     }
     do {
         temp = punkt_poczatkowy;
