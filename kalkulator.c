@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <gtk/gtk.h>
@@ -78,21 +77,21 @@ static wielomian czytaj_wielomian(char **inp) {
             }
             switch (z) {
                 case 'x':
-                    w->var[0] = pow + 1;
-                    w->size *= pow + 1;
+                    w->var[0] += pow;
                     break;
                 case 'y':
-                    w->var[1] = pow + 1;
-                    w->size *= pow + 1;
+                    w->var[1] += pow;
                     break;
                 case 'z':
-                    w->var[2] = pow + 1;
-                    w->size *= pow + 1;
+                    w->var[2] += pow;
                     break;
                 default:
                     msg("Niespodziewany błąd");
                     return NULL;
             }
+        }
+        for(int i=0;i<3;i++){
+            w->size*=w->var[i];
         }
         zwroc_znak(z == 0 ? EOF : z, inp);
         double *tab = calloc(w->size, sizeof(double));
