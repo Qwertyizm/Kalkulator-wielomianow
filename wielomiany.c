@@ -265,7 +265,7 @@ wielomian multiply(wielomian v, wielomian y) {
 }
 
 wielomian divide(wielomian v, wielomian y, wielomian r, bool delete) {
-    if (v == NULL || y == NULL ) {
+    if (v == NULL || y == NULL || r==NULL) {
         msg("unsupported action");
         return NULL;
     }
@@ -273,6 +273,12 @@ wielomian divide(wielomian v, wielomian y, wielomian r, bool delete) {
     uprosc(y);
     wielomian z = malloc(sizeof(Wielomian));
     z->size=1;
+
+
+    wielomian temp = copy(v);
+    *r = *temp;
+    free(temp);
+
     for(int i=0;i<3;i++){
         z->var[i] = v->var[i] - y->var[i] + 1;
         z->size*=z->var[i];
@@ -289,8 +295,7 @@ wielomian divide(wielomian v, wielomian y, wielomian r, bool delete) {
 
 
 
-    wielomian temp = copy(v);
-    *r = *temp;
+
 
 
     double *tab = calloc(z->size, sizeof(double));
