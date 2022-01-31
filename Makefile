@@ -1,12 +1,19 @@
 CC=gcc
-CFLAGS= -std=c11 -Wall -Wextra -Werror
-LDFLAGS= -lm
-DEPS = kalkulator.h wielomiany.h
+CFLAGS= -std=c11 -Wall -Wextra -Werror  $(shell pkg-config --cflags gtk+-3.0)
+LDFLAGS = -lm
+LDLIBS = $(shell pkg-config gtk+-3.0  --libs)
 NAME = kalkulator
-PKG = 'pkg-config gtk+-3.0 --cflags --libs'
-$(NAME): kalkulator.o wielomiany.o main.c
-	$(CC) $(CFLAGS) kalkulator.o wielomiany.o main.c -o $(NAME) $(PKG) $(LDFLAGS)
-wielomiany.o: wielomiany.c $(DEPS)
-	$(CC) -c $(CFLAGS) wielomiany.c -o wielomiany.o
-kalkulator.o: kalkulator.c $(DEPS)
-	$(CC) -c $(CFLAGS) kalkulator.c -o kalkulator.o $(PKG)
+
+SRC = wielomiany.c kalkulator.c main.c
+DEPS= wielomiany.h kalkulator.h
+OBJS = wielomiany.o kalkulator.o main.o
+YOU : $(SRC) $(NAME)
+
+$(NAME): $(OBJS)
+	#$(CC) $(CFLAGS)  main.c wielomiany.c kalkulator.c -o kalkulator $(LDFLAGS) $(LDLIBS)
+	$(CC) $(CFLAGS) $(OBJS) -o kalkulator $(LDFLAGS) $(LDLIBS)
+
+%.o: %.c $(DEPS)
+	$(CC) $(CFLAGS) -c -o $@ $< $(LDFLAGS) $(LDLIBS)
+clean:
+	rm -f $(OBJS) $(NAME)

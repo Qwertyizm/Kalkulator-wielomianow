@@ -51,7 +51,7 @@ char *print(wielomian v, bool delete) {
                     strcat(wynik, temp);
                     czy_pierwszy = true;
                 } else {
-                    if (v->var[0] - 1 == i && v->var[1] - 1 == ii & v->var[2] - 1 == iii) {
+                    if (v->var[0] - 1 == i && v->var[1] - 1 == ii && v->var[2] - 1 == iii) {
                         if (is_int(wart)) {
                             sprintf(temp, "%i", (int) wart);
                         } else {
@@ -155,7 +155,7 @@ wielomian copy(wielomian v) {
 
 wielomian add(wielomian v, wielomian y) {
     if (v == NULL || y == NULL) {
-        msg("unsupported action");
+        msg("Pusty wielomian przy dodawaniu");
         return NULL;
     }
     wielomian z = malloc(sizeof(Wielomian));
@@ -193,7 +193,7 @@ wielomian add(wielomian v, wielomian y) {
 
 wielomian sub(wielomian v, wielomian y) {
     if (v == NULL || y == NULL) {
-        msg("unsupported action");
+        msg("Pusty wielomian przy odejmowaniu");
         return NULL;
     }
     wielomian z = malloc(sizeof(Wielomian));
@@ -231,7 +231,7 @@ wielomian sub(wielomian v, wielomian y) {
 
 wielomian multiply(wielomian v, wielomian y) {
     if (v == NULL || y == NULL) {
-        msg("unsupported action");
+        msg("Pusty wielomian przy mnożeniu");
         return NULL;
     }
     wielomian z = malloc(sizeof(Wielomian));
@@ -266,7 +266,7 @@ wielomian multiply(wielomian v, wielomian y) {
 
 wielomian divide(wielomian v, wielomian y, wielomian r, bool delete) {
     if (v == NULL || y == NULL || r==NULL) {
-        msg("unsupported action");
+        msg("Pusty wielomian przy dzieleniu");
         return NULL;
     }
     uprosc(v);
@@ -292,11 +292,6 @@ wielomian divide(wielomian v, wielomian y, wielomian r, bool delete) {
             return z;
         }
     }
-
-
-
-
-
 
     double *tab = calloc(z->size, sizeof(double));
     bool done_something=true;
@@ -363,7 +358,7 @@ wielomian divide(wielomian v, wielomian y, wielomian r, bool delete) {
 
 bool greater_than_zero(wielomian v) {
     if (v == NULL) {
-        msg("unsupported action");
+        msg("Pusty wielomian przy porównywaniu");
         return false;
     }
     if(v->size==1&&v->val[0]==0){
@@ -383,7 +378,7 @@ bool greater_than_zero(wielomian v) {
 
 wielomian nwd(wielomian v, wielomian y) {
     if (v == NULL || y == NULL) {
-        msg("unsupported action");
+        msg("Pusty wielomian przy wyznaczaniu NWD");
         return NULL;
     }
     wielomian a = copy(v);
@@ -409,7 +404,11 @@ wielomian nwd(wielomian v, wielomian y) {
 
 wielomian derivative(wielomian v, bool delete) {
     if (((v->var[0] > 1) + (v->var[1] > 1) + (v->var[2] > 1)) > 1) {
-        msg("unsupported action");
+        msg("Wielomian więcej niż jednej zmiennej");
+        return NULL;
+    }
+    if(v==NULL){
+        msg("Pusty wielomian przy wyznaczaniu pochodnej");
         return NULL;
     }
     wielomian wynik = malloc(sizeof(Wielomian));
@@ -446,7 +445,11 @@ double abs_d(double d) {
 
 wielomian m_zero(wielomian v) {
     if (((v->var[0] > 1) + (v->var[1] > 1) + (v->var[2] > 1)) > 1) {
-        msg("unsupported action");
+        msg("Wielomian więcej niż jednej zmiennej");
+        return NULL;
+    }
+    if(v==NULL){
+        msg("Pusty wielomian przy wyznaczaniu miejsca zerowego");
         return NULL;
     }
     wielomian pochodna = derivative(v, false);
@@ -461,9 +464,16 @@ wielomian m_zero(wielomian v) {
         }
     }
     if(pot==-1){
-        msg("Brak miejsca zerowego");
-        return NULL;
+        if(v->var[0]!=0){
+            msg("Brak miejsca zerowego");
+            return NULL;
+        }
+        else{
+            msg("Funkcja posiada miejsca zerowe na całej swojej dziedzinie");
+            return NULL;
+        }
     }
+
     do {
         temp = punkt_poczatkowy;
         wielomian t = from_d_to_w(temp);
@@ -478,7 +488,7 @@ wielomian m_zero(wielomian v) {
                 punkt_poczatkowy = temp - (compute(v, NULL, NULL, t, false)) / (compute(pochodna, NULL, NULL, t, false));
                 break;
             default:
-                msg("Niespodziewany błąd");
+                msg("Niespodziewany błąd podczas wyznaczania miejsca zerowego");
                 return NULL;
         }
         free(t);
@@ -502,6 +512,10 @@ wielomian from_d_to_w(double d) {
 }
 
 void uprosc(wielomian v){
+    if(v==NULL){
+        msg("Pusty wielomian przy upraszczaniu");
+        return;
+    }
     int potx=v->var[0]-1,poty=v->var[1]-1,potz=v->var[2]-1;
     for(int j=0;j<v->var[0];j++){
         for(int jj=0;jj<v->var[1];jj++){

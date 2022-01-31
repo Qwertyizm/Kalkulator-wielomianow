@@ -1,4 +1,5 @@
-#include "kalkulator.h"
+#include "wielomiany.h"
+#include <stdlib.h>
 #include <gtk/gtk.h>
 #include <string.h>
 
@@ -10,6 +11,21 @@ typedef struct {
     GtkWidget *reszta;
 } paczka;
 
+void msg(gchar *message) {
+    GtkWidget *dialog, *label, *content_area;
+    GtkDialogFlags flags;
+
+    flags = GTK_DIALOG_MODAL;
+
+    dialog = gtk_dialog_new_with_buttons("Błąd", NULL, flags, "_OK", GTK_RESPONSE_NONE, NULL);
+    content_area = gtk_dialog_get_content_area(GTK_DIALOG (dialog));
+    label = gtk_label_new(message);
+
+    g_signal_connect_swapped (dialog, "response", G_CALLBACK(gtk_widget_destroy), dialog);
+
+    gtk_container_add(GTK_CONTAINER (content_area), label);
+    gtk_widget_show_all(dialog);
+}
 
 G_MODULE_EXPORT void oblicz_wyrazenie(GtkWidget *widget, paczka *data) {
     gchar wejscie[100 + 2];
@@ -35,6 +51,9 @@ G_MODULE_EXPORT void oblicz_wyrazenie(GtkWidget *widget, paczka *data) {
         del(w2);
         gtk_entry_set_text(GTK_ENTRY(data->reszta), "0");
     }
+    if(strcmp(gtk_button_get_label((GtkButton*)widget),"=")){
+        msg("Stara wersja programu");
+    }
 }
 
 G_MODULE_EXPORT void test_nacisniecia(GtkWidget *widget) {
@@ -56,6 +75,9 @@ G_MODULE_EXPORT void dodaj_do_text(GtkWidget *widget, gpointer data) {
 
 G_MODULE_EXPORT void clear_text(GtkWidget *widget, gpointer data) {
     gtk_entry_set_text(data, "");
+    if(strcmp(gtk_button_get_label((GtkButton*)widget),"=")){
+        msg("Stara wersja programu");
+    }
 }
 
 
@@ -82,21 +104,7 @@ static void make_window() {
 }
 
 
-void msg(gchar *message) {
-    GtkWidget *dialog, *label, *content_area;
-    GtkDialogFlags flags;
 
-    flags = GTK_DIALOG_MODAL;
-
-    dialog = gtk_dialog_new_with_buttons("Błąd", NULL, flags, "_OK", GTK_RESPONSE_NONE, NULL);
-    content_area = gtk_dialog_get_content_area(GTK_DIALOG (dialog));
-    label = gtk_label_new(message);
-
-    g_signal_connect_swapped (dialog, "response", G_CALLBACK(gtk_widget_destroy), dialog);
-
-    gtk_container_add(GTK_CONTAINER (content_area), label);
-    gtk_widget_show_all(dialog);
-}
 
 
 int main(int argc, char *argv[]) {

@@ -129,7 +129,7 @@ static wielomian wyrazenie(char **inp, wielomian w2) {
 
 static wielomian skladnik(char **inp, wielomian w2) {
     int z, c;
-    wielomian wyn, x2,x3,x4;
+    wielomian wyn, x[3];
 
     if ((z = czytaj_znak(inp)) == 'c' || z == 'G' || z == 'm' || z == 'd') {
         while ((c = *(*inp)++) != '\0' && (isalpha(c) || c == '_'));
@@ -150,39 +150,75 @@ static wielomian skladnik(char **inp, wielomian w2) {
                     msg("Brakuje przecinka");
                     return NULL;
                 }
-                x2 = wyrazenie(inp, NULL);
+                char zmienna[3]={0,0,0};
                 if(z=='c'){
-                    if (*(*inp) == ',') {
-                        (*inp)++; //ignore ','
-                    } else {
-                        msg("Brakuje przecinka");
+                    zmienna[0]=*(*inp)++;
+                    if(*(*inp)=='='){
+                        (*inp)++; //ignore '='
+                    }
+                    else{
+                        msg("Brakuje znaku '='");
                         return NULL;
                     }
-                    x3=wyrazenie(inp,NULL);
-                    if (*(*inp) == ',') {
-                        (*inp)++; //ignore ','
-                    } else {
-                        msg("Brakuje przecinka");
-                        return NULL;
+                }
+                x[0] = wyrazenie(inp, NULL);
+                if(z=='c'){
+                    for(int i=1;i<3;i++){
+                        if (*(*inp) == ',') {
+                            (*inp)++; //ignore ','
+                        } else {
+                            break;
+                        }
+                        zmienna[i]=*(*inp)++;
+                        if(*(*inp)=='='){
+                            (*inp)++; //ignore '='
+                        }
+                        else{
+                            msg("Brakuje znaku '='");
+                            return NULL;
+                        }
+                        x[i]=wyrazenie(inp,NULL);
                     }
-                    x4=wyrazenie(inp,NULL);
                 }
                 if ((c = czytaj_znak(inp)) == ')') {
-                    wyn = (z == 'c' ? from_d_to_w(compute(wyn, x2, x3, x4, true)) : nwd(wyn, x2));
+                    if(z=='c'){
+                        wielomian akt[3]={NULL,NULL,NULL};
+                        for(int i=0;i<3;i++){
+                            switch (zmienna[i]) {
+                                case 'x':
+                                    akt[0]=x[i];
+                                    break;
+                                case 'y':
+                                    akt[1]=x[i];
+                                    break;
+                                case 'z':
+                                    akt[2]=x[i];
+                                    break;
+                                case 0:
+                                    break;
+                                default:
+                                    msg("Nieznana zmienna");
+                                    return NULL;
+                            }
+                        }
+                        wyn=from_d_to_w(compute(wyn,(akt[0]!=NULL?akt[0]:from_d_to_w(0)),(akt[1]!=NULL?akt[1]:from_d_to_w(0)),(akt[2]!=NULL?akt[2]:from_d_to_w(0)),true));
+                    }else{
+                        wyn=nwd(wyn,x[0]);
+                    }
                 } else {
                     msg("Brakuje nawiasu");
                     return NULL;
                 }
             }
         } else {
-            msg("Błędna składnia");
+            msg("Brakuje nawiasu");
         }
     } else {
         zwroc_znak(z, inp);
         wyn = czynnik(inp);
         while ((z = czytaj_znak(inp)) == '*' || z == '/') {
-            x2 = czynnik(inp);
-            wyn = (z == '*' ? multiply(wyn, x2) : divide(wyn, x2, w2, true));
+            x[0] = czynnik(inp);
+            wyn = (z == '*' ? multiply(wyn, x[0]) : divide(wyn, x[0], w2, true));
         }
         zwroc_znak(z, inp);
     }
