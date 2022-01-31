@@ -51,8 +51,12 @@ G_MODULE_EXPORT void oblicz_wyrazenie(GtkWidget *widget, paczka *data) {
         del(w2);
         gtk_entry_set_text(GTK_ENTRY(data->reszta), "0");
     }
-    if(strcmp(gtk_button_get_label((GtkButton*)widget),"=")){
-        msg("Stara wersja programu");
+    if(widget!=NULL){
+        int i=0;
+        while(i>0){
+            printf("checkout");
+            i++;
+        }
     }
 }
 
@@ -75,8 +79,12 @@ G_MODULE_EXPORT void dodaj_do_text(GtkWidget *widget, gpointer data) {
 
 G_MODULE_EXPORT void clear_text(GtkWidget *widget, gpointer data) {
     gtk_entry_set_text(data, "");
-    if(strcmp(gtk_button_get_label((GtkButton*)widget),"=")){
-        msg("Stara wersja programu");
+    if(widget!=NULL){
+        int i=0;
+        while(i>0){
+            printf("checkout");
+            i++;
+        }
     }
 }
 

@@ -324,15 +324,15 @@
             </child>
             <child>
               <object class="GtkButton" id="Enter">
-                <property name="label" translatable="yes">=</property>
+                <property name="label" translatable="yes">Enter</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
               </object>
               <packing>
                 <property name="left-attach">5</property>
-                <property name="top-attach">2</property>
-                <property name="height">3</property>
+                <property name="top-attach">3</property>
+                <property name="height">2</property>
               </packing>
             </child>
             <child>
@@ -476,6 +476,19 @@
               <packing>
                 <property name="left-attach">4</property>
                 <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="label" translatable="yes">=</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <signal name="clicked" handler="dodaj_do_text" object="Wejscie" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left-attach">5</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
           </object>
