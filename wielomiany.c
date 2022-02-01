@@ -473,8 +473,13 @@ wielomian m_zero(wielomian v) {
             return NULL;
         }
     }
-
+    int i=0;
     do {
+        i++;
+        if(i>100000){
+            msg("Brak miejsca zerowego");
+            return NULL;
+        }
         temp = punkt_poczatkowy;
         wielomian t = from_d_to_w(temp);
         switch (pot) {
