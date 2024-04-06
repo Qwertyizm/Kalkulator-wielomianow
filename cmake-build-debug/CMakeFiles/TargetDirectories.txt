@@ -1,3 +1,0 @@
-C:/Users/Stan/Desktop/Projekty C/Projekt/cmake-build-debug/CMakeFiles/Projekt.dir
-C:/Users/Stan/Desktop/Projekty C/Projekt/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Stan/Desktop/Projekty C/Projekt/cmake-build-debug/CMakeFiles/rebuild_cache.dir
